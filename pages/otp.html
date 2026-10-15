@@ -1,0 +1,219 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Bypass OTP - Homeland of Testing</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      background: #ffffff;
+      color: #202124;
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 360px;
+      text-align: center;
+    }
+
+    .home {
+      display: block;
+      margin-bottom: 35px;
+      color: #1a73e8;
+      text-align: left;
+      font-size: 14px;
+      text-decoration: none;
+    }
+
+    h1 {
+      margin: 0 0 12px;
+      font-size: 25px;
+      font-weight: 600;
+    }
+
+    p {
+      margin: 0 0 25px;
+      color: #70757a;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .otp-inputs {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 22px;
+    }
+
+    .otp-inputs input {
+      width: 58px;
+      height: 62px;
+      border: 1px solid #dadce0;
+      border-radius: 8px;
+      outline: none;
+      text-align: center;
+      font-size: 25px;
+      color: #202124;
+    }
+
+    .otp-inputs input:focus {
+      border-color: #1a73e8;
+      box-shadow: 0 0 0 1px #1a73e8;
+    }
+
+    button {
+      width: 100%;
+      padding: 13px;
+      border: 0;
+      border-radius: 7px;
+      background: #1a73e8;
+      color: white;
+      font-size: 15px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #1765cc;
+    }
+
+    #message {
+      margin-top: 20px;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .success {
+      color: #188038;
+    }
+
+    .error {
+      color: #d93025;
+    }
+
+    .back-home {
+      display: inline-block;
+      margin-top: 12px;
+      color: #1a73e8;
+      text-decoration: none;
+    }
+
+    .back-home:hover,
+    .home:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="container">
+    <a class="home" href="/">← Homeland of Testing</a>
+
+    <h1>Bypass OTP</h1>
+    <p>Enter the 4-digit OTP to complete this testing exercise.</p>
+
+    <form id="otpForm">
+      <div class="otp-inputs">
+        <input aria-label="Digit 1" inputmode="numeric"
+               maxlength="1" pattern="[0-9]" required autofocus>
+        <input aria-label="Digit 2" inputmode="numeric"
+               maxlength="1" pattern="[0-9]" required>
+        <input aria-label="Digit 3" inputmode="numeric"
+               maxlength="1" pattern="[0-9]" required>
+        <input aria-label="Digit 4" inputmode="numeric"
+               maxlength="1" pattern="[0-9]" required>
+      </div>
+
+      <button type="submit">Verify OTP</button>
+    </form>
+
+    <div id="message" aria-live="polite"></div>
+  </main>
+
+  <script>
+    // Demo only: this OTP is visible in the client-side HTML.
+    const DEMO_OTP = "6738";
+
+    const form = document.getElementById("otpForm");
+    const inputs = [...document.querySelectorAll(".otp-inputs input")];
+    const message = document.getElementById("message");
+
+    inputs.forEach((input, index) => {
+      input.addEventListener("input", () => {
+        input.value = input.value.replace(/\D/g, "").slice(0, 1);
+
+        if (input.value && index < inputs.length - 1) {
+          inputs[index + 1].focus();
+        }
+
+        message.textContent = "";
+        message.className = "";
+      });
+
+      input.addEventListener("keydown", event => {
+        if (event.key === "Backspace" && !input.value && index > 0) {
+          inputs[index - 1].focus();
+        }
+
+        if (event.key === "ArrowLeft" && index > 0) {
+          inputs[index - 1].focus();
+        }
+
+        if (event.key === "ArrowRight" && index < inputs.length - 1) {
+          inputs[index + 1].focus();
+        }
+      });
+
+      input.addEventListener("paste", event => {
+        const pasted = event.clipboardData
+          .getData("text")
+          .replace(/\D/g, "")
+          .slice(0, 4);
+
+        if (pasted.length > 1) {
+          event.preventDefault();
+
+          [...pasted].forEach((digit, i) => {
+            inputs[i].value = digit;
+          });
+
+          inputs[Math.min(pasted.length, 3)].focus();
+        }
+      });
+    });
+
+    form.addEventListener("submit", event => {
+      event.preventDefault();
+
+      const enteredOTP = inputs.map(input => input.value).join("");
+
+      if (enteredOTP.length !== 4) {
+        message.textContent = "Please enter all 4 digits.";
+        message.className = "error";
+        return;
+      }
+
+      if (enteredOTP === DEMO_OTP) {
+        message.className = "success";
+        message.innerHTML =
+          'You passed the test!<br><a class="back-home" href="/">Go to Home</a>';
+      } else {
+        message.textContent = "Incorrect OTP. Try again.";
+        message.className = "error";
+      }
+    });
+  </script>
+</body>
+</html>
