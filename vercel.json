@@ -1,0 +1,8 @@
+
+{
+  "functions": {
+    "api/pages.js": {
+      "includeFiles": "pages/**"
+    }
+  }
+}
