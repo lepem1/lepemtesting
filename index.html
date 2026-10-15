@@ -4,634 +4,372 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#0b1020">
-  <meta name="description" content="Homeland of Testing — a security testing lab for learning, experiments, and authorized testing.">
-
+  <meta name="theme-color" content="#ffffff">
+  <meta name="description" content="Homeland of Testing — search and explore testing pages.">
   <title>Homeland of Testing</title>
 
   <style>
-    :root {
-      color-scheme: dark;
-      --bg: #0b1020;
-      --surface: #111a2e;
-      --surface-light: #17233b;
-      --border: #263550;
-      --text: #f3f6ff;
-      --muted: #9aa9c3;
-      --accent: #8b7cff;
-      --accent-light: #b0a6ff;
-      --green: #6ee7b7;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      min-height: 100vh;
-      background:
-        radial-gradient(ellipse at 50% 0%, #292253 0%, transparent 48%),
-        var(--bg);
-      color: var(--text);
-      font-family: Inter, Arial, sans-serif;
-      line-height: 1.6;
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
-
-    .container {
-      width: min(1120px, calc(100% - 40px));
-      margin: auto;
+      background: #fff;
+      color: #202124;
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 14px;
     }
 
     header {
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      background: rgba(11, 16, 32, 0.88);
-      border-bottom: 1px solid rgba(154, 169, 195, 0.15);
-      backdrop-filter: blur(16px);
-    }
-
-    .navbar {
-      min-height: 74px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 20px;
+      padding: 19px 28px;
+      border-bottom: 1px solid #eee;
     }
 
     .brand {
-      display: flex;
-      align-items: center;
-      gap: 11px;
-      font-size: 17px;
-      font-weight: 800;
-      letter-spacing: -0.4px;
-    }
-
-    .brand-icon {
-      display: grid;
-      place-items: center;
-      width: 40px;
-      height: 40px;
-      border: 1px solid #7466da;
-      border-radius: 12px;
-      background: #29234f;
-      color: var(--accent-light);
+      color: #202124;
       font-size: 20px;
+      font-weight: 600;
+      text-decoration: none;
+      letter-spacing: -.5px;
     }
 
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 26px;
-      color: var(--muted);
-      font-size: 14px;
+    main {
+      width: min(650px, calc(100% - 36px));
+      margin: 75px auto 60px;
     }
 
-    .nav-links a:hover {
-      color: white;
-    }
-
-    .nav-button {
-      padding: 10px 15px;
-      border: 1px solid #7164d5;
-      border-radius: 10px;
-      color: white !important;
-      background: #29234f;
-    }
-
-    .hero {
-      padding: 100px 0 75px;
+    .logo {
+      margin-bottom: 27px;
       text-align: center;
     }
 
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 9px;
-      padding: 7px 13px;
-      border: 1px solid #393463;
-      border-radius: 999px;
-      background: rgba(41, 35, 79, 0.55);
-      color: var(--accent-light);
-      font-size: 12px;
-      font-weight: 700;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-    }
-
-    .status-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--green);
-      box-shadow: 0 0 12px rgba(110, 231, 183, 0.5);
-    }
-
     h1 {
-      max-width: 850px;
-      margin: 25px auto 20px;
-      font-size: clamp(40px, 7vw, 76px);
-      line-height: 1.08;
-      letter-spacing: -3px;
+      margin: 0;
+      font-size: clamp(30px, 6vw, 42px);
+      font-weight: 400;
+      letter-spacing: -1.5px;
     }
 
-    .gradient {
-      color: var(--accent-light);
-      background: linear-gradient(100deg, #a99cff, #77d9f7);
-      background-clip: text;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
+    h1 span { font-weight: 700; }
+
+    .subtitle {
+      margin-top: 12px;
+      color: #70757a;
+      text-align: center;
+      line-height: 1.6;
     }
 
-    .hero-description {
-      max-width: 650px;
-      margin: 0 auto;
-      color: var(--muted);
-      font-size: 17px;
-    }
-
-    .hero-actions {
+    .search {
       display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 13px;
-      margin-top: 32px;
-    }
-
-    .button {
-      display: inline-flex;
       align-items: center;
-      justify-content: center;
-      min-height: 47px;
-      padding: 12px 20px;
-      border: 1px solid var(--border);
-      border-radius: 11px;
+      gap: 10px;
+      min-height: 52px;
+      margin-top: 28px;
+      padding: 0 16px;
+      border: 1px solid #dfe1e5;
+      border-radius: 28px;
+      box-shadow: 0 1px 5px #0000000a;
+      transition: box-shadow .15s, border-color .15s;
+    }
+
+    .search:focus-within,
+    .search:hover {
+      border-color: transparent;
+      box-shadow: 0 1px 6px #20212435;
+    }
+
+    .search-icon {
+      color: #777;
+      font-size: 19px;
+    }
+
+    input {
+      width: 100%;
+      min-width: 0;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: #202124;
       font: inherit;
-      font-size: 14px;
-      font-weight: 700;
-      transition: transform 0.2s, background 0.2s;
+      font-size: 16px;
     }
 
-    .button:hover {
-      transform: translateY(-2px);
+    .summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 29px 0 17px;
+      color: #70757a;
+      font-size: 13px;
     }
 
-    .button-primary {
-      border-color: var(--accent);
-      background: var(--accent);
-      color: #fff;
+    .refresh {
+      border: 0;
+      background: none;
+      color: #1a73e8;
+      font: inherit;
+      cursor: pointer;
     }
 
-    .button-secondary {
-      background: var(--surface);
-    }
+    .refresh:disabled { opacity: .5; }
 
-    .stats {
+    #results {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-      max-width: 740px;
-      margin: 65px auto 0;
+      gap: 26px;
     }
 
-    .stat {
-      padding: 19px 12px;
-      border: 1px solid var(--border);
-      border-radius: 13px;
-      background: rgba(17, 26, 46, 0.7);
-    }
+    .result { min-width: 0; }
 
-    .stat strong {
-      display: block;
-      font-size: 21px;
-    }
-
-    .stat span {
-      color: var(--muted);
+    .result-url {
+      overflow-wrap: anywhere;
+      margin-bottom: 7px;
+      color: #188038;
       font-size: 12px;
     }
 
-    section {
-      padding: 35px 0 65px;
-      scroll-margin-top: 95px;
+    .result h2 {
+      margin: 0 0 7px;
+      font-size: 20px;
+      font-weight: 400;
     }
 
-    .section-heading {
-      display: flex;
-      align-items: end;
-      justify-content: space-between;
-      gap: 20px;
-      margin-bottom: 25px;
+    .result h2 a {
+      color: #1a0dab;
+      text-decoration: none;
     }
 
-    .section-heading h2 {
-      margin: 0 0 5px;
-      font-size: clamp(25px, 4vw, 34px);
-      letter-spacing: -1px;
-    }
+    .result h2 a:hover { text-decoration: underline; }
 
-    .section-heading p {
+    .result-description {
       margin: 0;
-      color: var(--muted);
-      font-size: 14px;
+      color: #4d5156;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
     }
 
-    .lab-grid {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 17px;
-    }
-
-    .lab-card {
-      display: flex;
-      flex-direction: column;
-      min-height: 250px;
-      padding: 23px;
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      background: linear-gradient(
-        145deg,
-        rgba(23, 35, 59, 0.95),
-        rgba(17, 26, 46, 0.92)
-      );
-      transition: border-color 0.2s, transform 0.2s;
-    }
-
-    .lab-card:hover {
-      border-color: #7568db;
-      transform: translateY(-4px);
-    }
-
-    .lab-icon {
-      display: grid;
-      place-items: center;
-      width: 47px;
-      height: 47px;
-      margin-bottom: 18px;
-      border: 1px solid #393463;
-      border-radius: 13px;
-      background: #29234f;
-      color: var(--accent-light);
-      font-size: 22px;
-    }
-
-    .lab-card h3 {
-      margin: 0 0 9px;
-      font-size: 18px;
-    }
-
-    .lab-card p {
-      margin: 0 0 22px;
-      color: var(--muted);
-      font-size: 13px;
-    }
-
-    .card-footer {
+    .result-actions {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      margin-top: auto;
-      padding-top: 14px;
-      border-top: 1px solid var(--border);
-      color: var(--accent-light);
-      font-size: 13px;
-      font-weight: 700;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 9px;
     }
 
-    .tag {
-      padding: 4px 8px;
-      border: 1px solid #34435b;
-      border-radius: 6px;
-      color: var(--muted);
-      font-size: 10px;
-      font-weight: 600;
+    .result-actions a,
+    .copy {
+      padding: 0;
+      border: 0;
+      background: none;
+      color: #5f6368;
+      font: inherit;
+      font-size: 12px;
+      text-decoration: none;
+      cursor: pointer;
     }
 
-    .notice {
-      display: flex;
-      align-items: flex-start;
-      gap: 15px;
-      padding: 22px;
-      border: 1px solid #34435b;
-      border-radius: 14px;
-      background: rgba(17, 26, 46, 0.75);
+    .result-actions a:hover,
+    .copy:hover { color: #1a73e8; }
+
+    .message {
+      padding: 28px 0;
+      color: #70757a;
+      line-height: 1.7;
     }
 
-    .notice-icon {
-      color: var(--green);
-      font-size: 22px;
-    }
-
-    .notice h3 {
-      margin: 0 0 6px;
-      font-size: 15px;
-    }
-
-    .notice p {
-      margin: 0;
-      color: var(--muted);
-      font-size: 13px;
+    .message strong {
+      display: block;
+      margin-bottom: 5px;
+      color: #202124;
+      font-weight: 500;
     }
 
     footer {
-      margin-top: 30px;
-      padding: 25px 0;
-      border-top: 1px solid var(--border);
-      color: var(--muted);
+      padding: 22px;
+      border-top: 1px solid #eee;
+      color: #70757a;
+      text-align: center;
       font-size: 12px;
     }
 
-    .footer-inner {
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    @media (max-width: 800px) {
-      .lab-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
-      .hero {
-        padding-top: 75px;
-      }
-    }
-
-    @media (max-width: 540px) {
-      .container {
-        width: min(100% - 28px, 1120px);
-      }
-
-      .navbar {
-        min-height: 65px;
-      }
-
-      .brand {
-        font-size: 14px;
-      }
-
-      .brand-icon {
-        width: 35px;
-        height: 35px;
-      }
-
-      .nav-links {
-        gap: 12px;
-        font-size: 12px;
-      }
-
-      .nav-links .optional {
-        display: none;
-      }
-
-      .hero {
-        padding: 65px 0 45px;
-      }
-
-      h1 {
-        letter-spacing: -1.7px;
-      }
-
-      .hero-description {
-        font-size: 15px;
-      }
-
-      .stats {
-        gap: 8px;
-        margin-top: 42px;
-      }
-
-      .stat {
-        padding: 14px 5px;
-      }
-
-      .stat strong {
-        font-size: 17px;
-      }
-
-      .stat span {
-        font-size: 10px;
-      }
-
-      .lab-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .lab-card {
-        min-height: 220px;
-      }
-
-      .section-heading {
-        align-items: flex-start;
-        flex-direction: column;
-      }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      html {
-        scroll-behavior: auto;
-      }
-
-      *, *::before, *::after {
-        transition-duration: 0.01ms !important;
-      }
+    @media (max-width: 600px) {
+      header { padding: 17px 18px; }
+      main { margin-top: 53px; }
+      .result h2 { font-size: 18px; }
     }
   </style>
 </head>
 
 <body>
   <header>
-    <div class="container navbar">
-      <a class="brand" href="/" aria-label="Homeland of Testing home">
-        <span class="brand-icon" aria-hidden="true">⌘</span>
-        <span>Homeland of Testing</span>
-      </a>
-
-      <nav class="nav-links" aria-label="Main navigation">
-        <a href="#labs">Testing Labs</a>
-        <a class="optional" href="#about">About</a>
-        <a class="nav-button" href="#labs">Explore Labs ↗</a>
-      </nav>
-    </div>
+    <a class="brand" href="/">Homeland of Testing</a>
   </header>
 
   <main>
-    <section class="hero">
-      <div class="container">
-        <div class="eyebrow">
-          <span class="status-dot"></span>
-          Security Learning Environment
-        </div>
+    <div class="logo">
+      <h1>Homeland <span>of Testing</span></h1>
+      <p class="subtitle">
+        Search testing pages, labs, and resources.
+      </p>
+    </div>
 
-        <h1>
-          Welcome to the<br>
-          <span class="gradient">Homeland of Testing</span>
-        </h1>
+    <label class="search">
+      <span class="search-icon" aria-hidden="true">⌕</span>
+      <input
+        id="query"
+        type="search"
+        placeholder="Search pages..."
+        autocomplete="off"
+        aria-label="Search testing pages"
+      >
+    </label>
 
-        <p class="hero-description">
-          Explore authentication, web security, and application testing
-          through dedicated labs built for learning and authorized experiments.
-        </p>
+    <div class="summary">
+      <span id="count">Loading pages...</span>
+      <button class="refresh" id="refresh" type="button">
+        Refresh results ↻
+      </button>
+    </div>
 
-        <div class="hero-actions">
-          <a class="button button-primary" href="#labs">
-            Explore Testing Labs →
-          </a>
-          <a class="button button-secondary" href="#about">
-            About the Project
-          </a>
-        </div>
-
-        <div class="stats">
-          <div class="stat">
-            <strong>Web Security</strong>
-            <span>Learn the fundamentals</span>
-          </div>
-          <div class="stat">
-            <strong>Hands-on</strong>
-            <span>Practice in authorized labs</span>
-          </div>
-          <div class="stat">
-            <strong>Modular</strong>
-            <span>Dedicated testing pages</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="labs">
-      <div class="container">
-        <div class="section-heading">
-          <div>
-            <h2>Testing Labs</h2>
-            <p>Choose a lab to explore its testing tools and learning exercises.</p>
-          </div>
-          <span class="tag">LAB DIRECTORY</span>
-        </div>
-
-        <div class="lab-grid">
-          <a class="lab-card" href="/pages/otp-testing.html">
-            <div class="lab-icon" aria-hidden="true">⌁</div>
-            <h3>OTP Security Testing</h3>
-            <p>
-              Learn how to test one-time password validation, expiration,
-              attempt limits, and verification logic in a controlled lab.
-            </p>
-            <div class="card-footer">
-              <span>Open Lab →</span>
-              <span class="tag">AUTH</span>
-            </div>
-          </a>
-
-          <a class="lab-card" href="/pages/authentication-testing.html">
-            <div class="lab-icon" aria-hidden="true">⛨</div>
-            <h3>Authentication Testing</h3>
-            <p>
-              Study login validation, access controls, error handling,
-              and common authentication weaknesses.
-            </p>
-            <div class="card-footer">
-              <span>Open Lab →</span>
-              <span class="tag">LOGIN</span>
-            </div>
-          </a>
-
-          <a class="lab-card" href="/pages/session-security.html">
-            <div class="lab-icon" aria-hidden="true">◈</div>
-            <h3>Session Security</h3>
-            <p>
-              Understand secure session handling, cookie flags,
-              session expiration, and logout behavior.
-            </p>
-            <div class="card-footer">
-              <span>Open Lab →</span>
-              <span class="tag">SESSIONS</span>
-            </div>
-          </a>
-
-          <a class="lab-card" href="/pages/security-headers.html">
-            <div class="lab-icon" aria-hidden="true">⌘</div>
-            <h3>Security Headers</h3>
-            <p>
-              Learn about browser security headers and how to assess
-              their configuration on authorized websites.
-            </p>
-            <div class="card-footer">
-              <span>Open Lab →</span>
-              <span class="tag">HTTP</span>
-            </div>
-          </a>
-
-          <a class="lab-card" href="/pages/input-validation.html">
-            <div class="lab-icon" aria-hidden="true">⟨/⟩</div>
-            <h3>Input Validation</h3>
-            <p>
-              Explore input handling, validation rules, and safe
-              ways to identify weaknesses in test applications.
-            </p>
-            <div class="card-footer">
-              <span>Open Lab →</span>
-              <span class="tag">INPUT</span>
-            </div>
-          </a>
-
-          <a class="lab-card" href="/pages/lab-guide.html">
-            <div class="lab-icon" aria-hidden="true">▤</div>
-            <h3>Lab Guide</h3>
-            <p>
-              Read the testing rules, understand the lab environment,
-              and learn how to document findings responsibly.
-            </p>
-            <div class="card-footer">
-              <span>Open Guide →</span>
-              <span class="tag">GUIDE</span>
-            </div>
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <section id="about">
-      <div class="container">
-        <div class="notice">
-          <div class="notice-icon" aria-hidden="true">✓</div>
-          <div>
-            <h3>Built for responsible testing</h3>
-            <p>
-              Homeland of Testing is intended for educational experiments
-              on systems you own or are explicitly authorized to assess.
-              Never use testing labs to access accounts, data, or services
-              without permission.
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
+    <div id="results" aria-live="polite">
+      <div class="message">Loading your pages...</div>
+    </div>
   </main>
 
   <footer>
-    <div class="container footer-inner">
-      <span>© <span id="year">2026</span> Homeland of Testing</span>
-      <span>Learn. Test. Understand. Improve.</span>
-    </div>
+    Homeland of Testing · Search your testing directory
   </footer>
 
   <script>
-    document.getElementById("year").textContent =
-      new Date().getFullYear();
+    const query = document.getElementById("query");
+    const results = document.getElementById("results");
+    const count = document.getElementById("count");
+    const refresh = document.getElementById("refresh");
+
+    let pages = [];
+    let loadError = false;
+
+    function escapeHTML(value) {
+      return String(value).replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      })[char]);
+    }
+
+    function getDescription(page) {
+      return page.description || "Open this page on Homeland of Testing.";
+    }
+
+    function render() {
+      if (loadError) {
+        count.textContent = "Pages unavailable";
+        results.innerHTML = `
+          <div class="message">
+            <strong>Could not load the page directory.</strong>
+            Check the Vercel API deployment and try refreshing.
+          </div>`;
+        return;
+      }
+
+      const term = query.value.trim().toLowerCase();
+
+      const filtered = pages.filter(page =>
+        page.title.toLowerCase().includes(term) ||
+        page.filename.toLowerCase().includes(term) ||
+        getDescription(page).toLowerCase().includes(term) ||
+        page.url.toLowerCase().includes(term)
+      );
+
+      count.textContent = term
+        ? `${filtered.length} search results`
+        : `${pages.length} pages available`;
+
+      if (!filtered.length) {
+        results.innerHTML = `
+          <div class="message">
+            <strong>No pages found</strong>
+            Try another search, or add an HTML file to the pages folder
+            and deploy your updated project.
+          </div>`;
+        return;
+      }
+
+      results.innerHTML = filtered.map(page => {
+        const url = new URL(page.url, location.origin).href;
+
+        return `
+          <article class="result">
+            <div class="result-url">${escapeHTML(url)}</div>
+            <h2>
+              <a href="${escapeHTML(page.url)}">
+                ${escapeHTML(page.title)}
+              </a>
+            </h2>
+            <p class="result-description">
+              ${escapeHTML(getDescription(page))}
+            </p>
+            <div class="result-actions">
+              <a href="${escapeHTML(page.url)}">Open page →</a>
+              <button
+                class="copy"
+                type="button"
+                data-copy="${escapeHTML(url)}"
+              >Copy URL</button>
+            </div>
+          </article>`;
+      }).join("");
+    }
+
+    async function loadPages() {
+      refresh.disabled = true;
+      count.textContent = "Loading pages...";
+
+      try {
+        const response = await fetch("/api/pages", {
+          cache: "no-store"
+        });
+
+        if (!response.ok) {
+          throw new Error("Page directory request failed");
+        }
+
+        const data = await response.json();
+
+        if (!Array.isArray(data.pages)) {
+          throw new Error("Invalid directory response");
+        }
+
+        pages = data.pages;
+        loadError = false;
+      } catch (error) {
+        loadError = true;
+      } finally {
+        refresh.disabled = false;
+        render();
+      }
+    }
+
+    query.addEventListener("input", render);
+    refresh.addEventListener("click", loadPages);
+
+    results.addEventListener("click", async event => {
+      const button = event.target.closest("[data-copy]");
+      if (!button) return;
+
+      try {
+        await navigator.clipboard.writeText(button.dataset.copy);
+        button.textContent = "Copied!";
+        setTimeout(() => {
+          button.textContent = "Copy URL";
+        }, 1500);
+      } catch {
+        window.prompt("Copy this URL:", button.dataset.copy);
+      }
+    });
+
+    loadPages();
   </script>
 </body>
 </html>
