@@ -4,465 +4,442 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Learn about IDOR and object-level authorization testing in authorized security labs.">
-  <title>IDOR Testing Lab | Homeland of Testing</title>
-
+  <meta name="robots" content="noindex, nofollow">
+  <title>IDOR Testing Lab — Homeland of Testing</title>
   <style>
     * { box-sizing: border-box; }
 
     body {
       margin: 0;
       background: #fff;
-      color: #202124;
-      font-family: Arial, Helvetica, sans-serif;
+      color: #222;
+      font-family: Arial, sans-serif;
       line-height: 1.6;
     }
 
     header {
-      padding: 18px 24px;
-      border-bottom: 1px solid #eee;
+      padding: 20px;
+      border-bottom: 1px solid #ddd;
     }
 
-    header a {
-      color: #202124;
-      font-size: 19px;
-      font-weight: 600;
-      text-decoration: none;
-    }
+    header a, a { color: #0645ad; }
 
     main {
-      width: min(850px, calc(100% - 32px));
-      margin: 38px auto 65px;
+      width: min(900px, calc(100% - 32px));
+      margin: 30px auto;
     }
 
-    .back {
-      display: inline-block;
-      margin-bottom: 24px;
-      color: #1a73e8;
-      font-size: 13px;
-      text-decoration: none;
-    }
+    h1 { margin-bottom: 8px; }
+    h2 { font-size: 20px; }
 
-    h1 {
-      margin: 0 0 8px;
-      font-size: 32px;
-      font-weight: 600;
-      letter-spacing: -1px;
-    }
-
-    .intro {
-      max-width: 700px;
-      margin: 0 0 25px;
-      color: #5f6368;
-      font-size: 14px;
-    }
-
-    .panel {
+    .notice {
+      padding: 12px;
+      border: 1px solid #ddd;
+      background: #fafafa;
       margin: 20px 0;
-      padding: 20px;
-      border: 1px solid #dadce0;
-      border-radius: 9px;
     }
 
-    h2 {
-      margin: 0 0 12px;
-      font-size: 19px;
-      font-weight: 600;
+    .test {
+      border: 1px solid #ddd;
+      padding: 18px;
+      margin: 18px 0;
+      border-radius: 5px;
     }
 
-    h3 {
-      margin: 0 0 8px;
-      font-size: 16px;
-    }
+    .test h2 { margin-top: 0; }
 
-    p {
-      margin: 8px 0;
+    .meta {
+      color: #555;
       font-size: 14px;
-    }
-
-    .muted { color: #5f6368; }
-
-    .types {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 12px;
-    }
-
-    .type {
-      padding: 17px;
-      border: 1px solid #e0e0e0;
-      border-radius: 8px;
-      min-width: 0;
-    }
-
-    .number {
-      display: inline-block;
-      margin-bottom: 8px;
-      color: #5f6368;
-      font-size: 12px;
-    }
-
-    .type p {
-      color: #5f6368;
-    }
-
-    code, pre {
-      font-family: Consolas, "Courier New", monospace;
     }
 
     code {
+      background: #f3f3f3;
+      padding: 2px 5px;
       overflow-wrap: anywhere;
-      font-size: 12px;
     }
 
-    pre {
-      overflow-x: auto;
-      padding: 13px;
-      border: 1px solid #eee;
-      border-radius: 6px;
+    button {
+      background: #fff;
+      border: 1px solid #777;
+      padding: 9px 13px;
+      cursor: pointer;
+      border-radius: 4px;
+      margin: 5px 5px 5px 0;
+      font-size: 14px;
+    }
+
+    button:hover { background: #f2f2f2; }
+
+    .run-all {
+      border-color: #222;
+      font-weight: bold;
+    }
+
+    .result {
+      display: none;
+      margin-top: 12px;
+      padding: 12px;
       background: #fafafa;
-      color: #202124;
-      font-size: 12px;
-      line-height: 1.7;
+      border: 1px solid #ddd;
       white-space: pre-wrap;
       overflow-wrap: anywhere;
     }
 
-    .notice {
-      padding: 14px 16px;
-      border-left: 3px solid #777;
-      background: #f8f9fa;
-      color: #5f6368;
-      font-size: 13px;
-    }
+    .result.visible { display: block; }
 
-    button {
-      min-height: 42px;
-      padding: 11px 16px;
-      border: 1px solid #dadce0;
-      border-radius: 6px;
-      background: #fff;
-      color: #202124;
-      font-size: 14px;
-      cursor: pointer;
-    }
-
-    button:hover { background: #f8f9fa; }
-
-    button.primary {
-      border-color: #1a73e8;
-      background: #1a73e8;
-      color: #fff;
-    }
-
-    button.primary:hover { background: #1765cc; }
-
-    .reveal-actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 16px;
-    }
-
-    #guide { margin-top: 20px; }
-
-    .guide-item {
-      padding: 19px 0;
-      border-top: 1px solid #eee;
-    }
-
-    .guide-item:first-child { border-top: 0; }
-
-    .guide-item ol {
-      padding-left: 22px;
-      font-size: 14px;
-    }
-
-    .guide-item li { margin: 7px 0; }
-
-    .count {
-      margin: 0 0 8px;
-      font-size: 28px;
-      font-weight: 600;
-    }
+    .pass { color: #176b36; font-weight: bold; }
+    .fail { color: #a12222; font-weight: bold; }
 
     footer {
-      padding: 22px;
-      border-top: 1px solid #eee;
-      color: #70757a;
+      border-top: 1px solid #ddd;
+      padding: 20px;
       text-align: center;
-      font-size: 12px;
-    }
-
-    [hidden] { display: none !important; }
-
-    @media (max-width: 600px) {
-      header { padding: 16px; }
-      main { margin-top: 25px; }
-      h1 { font-size: 28px; }
-      .types { grid-template-columns: 1fr; }
-      .panel { padding: 16px; }
+      color: #666;
+      font-size: 13px;
     }
   </style>
 </head>
-
 <body>
   <header>
-    <a href="/">Homeland of Testing</a>
+    <a href="/">← Homeland of Testing</a>
   </header>
 
   <main>
-    <a class="back" href="/">← Back to Homeland of Testing</a>
-
     <h1>IDOR Testing Lab</h1>
-    <p class="intro">
-      Learn how insecure object references happen, recognize common
-      patterns, and assess access controls using applications and
-      test accounts you own or are explicitly authorized to test.
+    <p>
+      Practise identifying broken object-level authorization using
+      eight isolated simulations.
     </p>
 
-    <section class="panel">
-      <h2>What is IDOR?</h2>
+    <div class="notice">
+      <strong>Simulation only:</strong>
+      These buttons run local JavaScript tests. They do not contact a real
+      server, use Burp Suite, or prove that any live website is vulnerable.
+      The simulated server checks whether the signed-in user owns the resource.
+    </div>
+
+    <p>
+      <strong>Test accounts:</strong>
+      Account A has ID <code>user-100</code>.
+      Account B has ID <code>user-200</code>.
+    </p>
+
+    <p>
+      <button class="run-all" onclick="runAllTests()">Run all 8 tests</button>
+      <button onclick="resetTests()">Reset results</button>
+    </p>
+
+    <p id="summary" aria-live="polite">Tests not run yet.</p>
+
+    <section class="test" data-test="0">
+      <h2>1. Numeric IDOR</h2>
+      <p>Scenario: a profile endpoint identifies profiles with numeric IDs.</p>
+      <p class="meta">
+        Request example:
+        <code>GET /api/profiles/200</code>
+      </p>
       <p>
-        Insecure Direct Object Reference (IDOR) is an access-control
-        vulnerability. An application identifies a resource using an
-        ID or another reference but fails to verify that the current
-        user is allowed to access that resource.
+        Test: Account A attempts to read Account B's profile by its numeric ID.
       </p>
-
-      <pre>Example URL:
-https://lab.example.test/api/profile/1001
-
-Security question:
-Does the server verify that the signed-in user
-is allowed to access profile 1001?</pre>
-
-      <div class="notice">
-        Changing an ID is not automatically a vulnerability.
-        The issue exists when the server grants unauthorized access
-        to the referenced resource.
-      </div>
+      <button onclick="runTest(0)">Run numeric ID test</button>
+      <div class="result" id="result-0" aria-live="polite"></div>
     </section>
 
-    <section class="panel">
-      <h2>IDOR patterns</h2>
-      <p class="muted">
-        The following are eight common testing categories and
-        related object-authorization scenarios.
+    <section class="test" data-test="1">
+      <h2>2. UUID / unpredictable ID</h2>
+      <p>
+        Scenario: a document uses a UUID instead of a sequential number.
+        Unpredictable IDs do not replace authorization checks.
       </p>
-
-      <div class="types">
-        <article class="type">
-          <span class="number">TYPE 01</span>
-          <h3>Numeric IDOR</h3>
-          <p>Resources use sequential identifiers such as user IDs or record numbers.</p>
-          <code>/api/profiles/1001</code>
-        </article>
-
-        <article class="type">
-          <span class="number">TYPE 02</span>
-          <h3>UUID Reference</h3>
-          <p>Resources use UUIDs or long opaque identifiers but still lack authorization checks.</p>
-          <code>/api/documents/{document-uuid}</code>
-        </article>
-
-        <article class="type">
-          <span class="number">TYPE 03</span>
-          <h3>Nested Resource IDOR</h3>
-          <p>A child object is accessed through a parent, such as a project's task.</p>
-          <code>/api/projects/{project}/tasks/{task}</code>
-        </article>
-
-        <article class="type">
-          <span class="number">TYPE 04</span>
-          <h3>API Object Access</h3>
-          <p>An API returns or modifies another user's object without checking ownership.</p>
-          <code>GET /api/orders/{order-id}</code>
-        </article>
-
-        <article class="type">
-          <span class="number">TYPE 05</span>
-          <h3>File or Document Access</h3>
-          <p>Private documents or attachments are exposed by predictable references.</p>
-          <code>/documents/{document-id}</code>
-        </article>
-
-        <article class="type">
-          <span class="number">TYPE 06</span>
-          <h3>Invoice or Order Access</h3>
-          <p>Financial or purchase records can be viewed by users who are not authorized.</p>
-          <code>/api/invoices/{invoice-id}</code>
-        </article>
-
-        <article class="type">
-          <span class="number">TYPE 07</span>
-          <h3>Role / Function Access</h3>
-          <p>Related access-control testing checks whether ordinary users can invoke privileged functions. This is often called BFLA, rather than IDOR.</p>
-          <code>POST /api/admin/reports</code>
-        </article>
-
-        <article class="type">
-          <span class="number">TYPE 08</span>
-          <h3>Export and Download Access</h3>
-          <p>Exports or generated reports can reveal another user's private information.</p>
-          <code>/api/exports/{export-id}</code>
-        </article>
-      </div>
+      <p class="meta">
+        Example: <code>GET /api/documents/doc-b7</code>
+      </p>
+      <button onclick="runTest(1)">Run UUID access test</button>
+      <div class="result" id="result-1" aria-live="polite"></div>
     </section>
 
-    <section class="panel">
-      <h2>How many types?</h2>
-      <div class="count">8 categories</div>
-      <p class="muted">
-        These are eight useful learning categories, not an official
-        or exhaustive count. IDOR is one form of broken object-level
-        authorization, and real applications can have many variations.
+    <section class="test" data-test="2">
+      <h2>3. Nested resource IDOR</h2>
+      <p>
+        Scenario: a comment is requested under a particular project.
+        The server must verify access to both the project and comment.
       </p>
-
-      <div class="reveal-actions">
-        <button class="primary" id="revealButton" type="button">
-          Reveal all testing guides
-        </button>
-        <button id="hideButton" type="button" hidden>
-          Hide guides
-        </button>
-      </div>
-
-      <div id="guide" hidden>
-        <article class="guide-item">
-          <h3>1. Numeric IDOR</h3>
-          <p><strong>Goal:</strong> Verify that records are restricted to authorized users.</p>
-          <ol>
-            <li>Use a test application with two accounts you control, Account A and Account B.</li>
-            <li>Sign in as Account A and open a record owned by A. Record its identifier.</li>
-            <li>Sign in as Account B and request A's record using the application's normal interface or a request captured in Burp.</li>
-            <li>Confirm that the server denies access to the record. A denial should not disclose private record contents.</li>
-          </ol>
-        </article>
-
-        <article class="guide-item">
-          <h3>2. UUID Reference</h3>
-          <p><strong>Goal:</strong> Check whether opaque identifiers are incorrectly treated as authorization.</p>
-          <ol>
-            <li>Create two private documents in your own test application, each owned by a different test account.</li>
-            <li>Observe how the application references each document.</li>
-            <li>While signed in as the other account, test access to the second document in your lab.</li>
-            <li>Verify that access is denied even when the requester knows the document's identifier.</li>
-          </ol>
-          <p class="muted">UUIDs can make identifiers harder to guess, but they do not replace authorization checks.</p>
-        </article>
-
-        <article class="guide-item">
-          <h3>3. Nested Resource IDOR</h3>
-          <p><strong>Goal:</strong> Verify ownership of both parent and child resources.</p>
-          <ol>
-            <li>Create two separate projects with separate test users.</li>
-            <li>Identify the project and task relationships in your own application's normal requests.</li>
-            <li>Test whether an account can access a task that belongs to a project it cannot access.</li>
-            <li>Verify that the server checks the entire resource relationship, not just whether the task exists.</li>
-          </ol>
-        </article>
-
-        <article class="guide-item">
-          <h3>4. API Object Access</h3>
-          <p><strong>Goal:</strong> Check authorization on API read and write operations.</p>
-          <ol>
-            <li>Use an API and test records you own or are permitted to assess.</li>
-            <li>Capture a normal read request in Burp Proxy's HTTP history.</li>
-            <li>Repeat the test using a second authorized test account and a record belonging to the first.</li>
-            <li>Where permitted, test update operations against your own disposable test records, then verify that unauthorized changes are rejected.</li>
-          </ol>
-          <p class="muted">Check reads, updates, and deletions separately: each operation needs appropriate authorization.</p>
-        </article>
-
-        <article class="guide-item">
-          <h3>5. File or Document Access</h3>
-          <p><strong>Goal:</strong> Verify that private files are not accessible to unrelated accounts.</p>
-          <ol>
-            <li>Upload harmless test files through your lab application using two test accounts.</li>
-            <li>Observe how the app generates authenticated download links or file requests.</li>
-            <li>Check whether the other account can access a private file through the app's authorized test workflow.</li>
-            <li>Verify access control at the file-serving endpoint or storage layer, not only in the user interface.</li>
-          </ol>
-        </article>
-
-        <article class="guide-item">
-          <h3>6. Invoice or Order Access</h3>
-          <p><strong>Goal:</strong> Ensure customers only see their own transactions.</p>
-          <ol>
-            <li>Create fictional orders or invoices in a test environment.</li>
-            <li>Use each test account to view its own transaction.</li>
-            <li>Check whether one account can retrieve another account's transaction in the lab.</li>
-            <li>Verify that both the record details and downloadable invoice are protected.</li>
-          </ol>
-        </article>
-
-        <article class="guide-item">
-          <h3>7. Role and Function Access (related BFLA testing)</h3>
-          <p><strong>Goal:</strong> Confirm that privileged functions require the appropriate role.</p>
-          <ol>
-            <li>Set up an administrator account and a regular account in a lab you control.</li>
-            <li>Document which actions each role is meant to perform.</li>
-            <li>Use the regular account to test a privileged action through the application's normal workflow.</li>
-            <li>Verify that the server rejects the action regardless of whether the UI hides the relevant control.</li>
-          </ol>
-          <p class="muted">This is related access-control testing, but it is not necessarily an IDOR vulnerability.</p>
-        </article>
-
-        <article class="guide-item">
-          <h3>8. Export and Download Access</h3>
-          <p><strong>Goal:</strong> Protect generated reports and exports.</p>
-          <ol>
-            <li>Generate separate test exports for two accounts.</li>
-            <li>Observe the normal process for checking export status and downloading a completed export.</li>
-            <li>Test whether an account can access another account's export within your authorized lab.</li>
-            <li>Verify authorization at both the export-status and download endpoints.</li>
-          </ol>
-        </article>
-
-        <div class="notice">
-          <strong>How to report a confirmed issue:</strong>
-          document the affected endpoint, the test accounts and roles,
-          the expected versus actual authorization behavior, and the
-          minimum evidence needed to demonstrate impact. Avoid collecting
-          unrelated private data.
-        </div>
-      </div>
+      <p class="meta">
+        Example:
+        <code>GET /api/projects/project-A/comments/comment-B</code>
+      </p>
+      <button onclick="runTest(2)">Run nested resource test</button>
+      <div class="result" id="result-2" aria-live="polite"></div>
     </section>
 
-    <section class="panel">
-      <h2>Prevention checklist</h2>
-      <ul>
-        <li>Enforce object-level authorization on the server for every request.</li>
-        <li>Check ownership and tenant boundaries for each resource.</li>
-        <li>Apply authorization to read, update, delete, export, and download operations.</li>
-        <li>Do not rely on hidden buttons, unpredictable IDs, or client-side checks.</li>
-        <li>Write automated tests for access by unauthorized users.</li>
-      </ul>
+    <section class="test" data-test="3">
+      <h2>4. API object access</h2>
+      <p>
+        Scenario: an API returns a user's private settings.
+        The API must check the authenticated user's permission.
+      </p>
+      <p class="meta">
+        Example: <code>GET /api/users/user-200/settings</code>
+      </p>
+      <button onclick="runTest(3)">Run API authorization test</button>
+      <div class="result" id="result-3" aria-live="polite"></div>
+    </section>
+
+    <section class="test" data-test="4">
+      <h2>5. File / document access</h2>
+      <p>
+        Scenario: a private report belongs to Account B.
+        Knowing its file identifier should not grant access.
+      </p>
+      <p class="meta">
+        Example: <code>GET /api/files/report-B</code>
+      </p>
+      <button onclick="runTest(4)">Run file access test</button>
+      <div class="result" id="result-4" aria-live="polite"></div>
+    </section>
+
+    <section class="test" data-test="5">
+      <h2>6. Invoice / order access</h2>
+      <p>
+        Scenario: Account A tries to view an order belonging to Account B.
+        Private order details must remain restricted.
+      </p>
+      <p class="meta">
+        Example: <code>GET /api/orders/order-B</code>
+      </p>
+      <button onclick="runTest(5)">Run order access test</button>
+      <div class="result" id="result-5" aria-live="polite"></div>
+    </section>
+
+    <section class="test" data-test="6">
+      <h2>7. Role / function authorization</h2>
+      <p>
+        Related access-control test: Account A attempts an administrator-only
+        operation. This is generally called broken function-level authorization
+        (BFLA), rather than a classic IDOR.
+      </p>
+      <p class="meta">
+        Example: <code>POST /api/admin/reports</code>
+      </p>
+      <button onclick="runTest(6)">Run admin permission test</button>
+      <div class="result" id="result-6" aria-live="polite"></div>
+    </section>
+
+    <section class="test" data-test="7">
+      <h2>8. Export / download access</h2>
+      <p>
+        Scenario: Account A requests a private export generated for Account B.
+        The download endpoint must check ownership or explicit permission.
+      </p>
+      <p class="meta">
+        Example: <code>GET /api/exports/export-B/download</code>
+      </p>
+      <button onclick="runTest(7)">Run export access test</button>
+      <div class="result" id="result-7" aria-live="polite"></div>
+    </section>
+
+    <section class="test">
+      <h2>What do the results mean?</h2>
+      <p>
+        <span class="pass">PASS</span> means the simulated server blocked the
+        unauthorized request as expected.
+      </p>
+      <p>
+        <span class="fail">FAIL</span> means the simulated server returned
+        protected data to the wrong account.
+      </p>
+      <p>
+        These results describe only the built-in simulations. To test a real
+        application, use an authorized test environment and verify its actual
+        server responses.
+      </p>
     </section>
   </main>
 
-  <footer>
-    Homeland of Testing · Educational use and authorized security testing
-  </footer>
+  <footer>Homeland of Testing — Educational lab</footer>
 
   <script>
-    const revealButton = document.getElementById("revealButton");
-    const hideButton = document.getElementById("hideButton");
-    const guide = document.getElementById("guide");
+    // Fictional data used only inside this browser page.
+    const currentUser = {
+      id: "user-100",
+      role: "user"
+    };
 
-    revealButton.addEventListener("click", () => {
-      guide.hidden = false;
-      revealButton.hidden = true;
-      hideButton.hidden = false;
-    });
+    const resources = {
+      profile: { id: "200", owner: "user-200", data: "Private profile B" },
+      document: { id: "doc-b7", owner: "user-200", data: "Private document B" },
+      project: { id: "project-A", owner: "user-100" },
+      comment: {
+        id: "comment-B",
+        projectId: "project-A",
+        owner: "user-200",
+        data: "Private comment B"
+      },
+      settings: {
+        id: "user-200",
+        owner: "user-200",
+        data: "Private settings B"
+      },
+      file: { id: "report-B", owner: "user-200", data: "Private report B" },
+      order: { id: "order-B", owner: "user-200", data: "Private order B" },
+      export: { id: "export-B", owner: "user-200", data: "Private export B" }
+    };
 
-    hideButton.addEventListener("click", () => {
-      guide.hidden = true;
-      revealButton.hidden = false;
-      hideButton.hidden = true;
-      revealButton.focus();
-    });
+    // Simulated server: deny access unless the current account owns the item.
+    function authorizeOwner(resource) {
+      if (!resource) {
+        return { status: 404, body: "Resource not found." };
+      }
+
+      if (resource.owner !== currentUser.id) {
+        return { status: 403, body: "Forbidden: you do not own this resource." };
+      }
+
+      return { status: 200, body: resource.data || "Authorized." };
+    }
+
+    // Each test attempts to access a fictional resource owned by Account B.
+    // The expected outcome is denial. These functions never make network calls.
+    const tests = [
+      {
+        name: "Numeric IDOR",
+        run: () => authorizeOwner(resources.profile),
+        expectedStatus: 403,
+        explanation: "A numeric identifier must not grant access to another user's profile."
+      },
+      {
+        name: "UUID access",
+        run: () => authorizeOwner(resources.document),
+        expectedStatus: 403,
+        explanation: "An unpredictable identifier must still be checked against the user's permissions."
+      },
+      {
+        name: "Nested resource IDOR",
+        run: () => {
+          const project = resources.project;
+          const comment = resources.comment;
+
+          if (!project || project.owner !== currentUser.id) {
+            return { status: 403, body: "Forbidden: no access to parent project." };
+          }
+
+          if (!comment || comment.projectId !== project.id ||
+              comment.owner !== currentUser.id) {
+            return { status: 403, body: "Forbidden: no access to this comment." };
+          }
+
+          return { status: 200, body: comment.data };
+        },
+        expectedStatus: 403,
+        explanation: "The server must check access to the parent and the nested item."
+      },
+      {
+        name: "API object access",
+        run: () => authorizeOwner(resources.settings),
+        expectedStatus: 403,
+        explanation: "Private API data must be authorized on the server."
+      },
+      {
+        name: "File access",
+        run: () => authorizeOwner(resources.file),
+        expectedStatus: 403,
+        explanation: "A file ID alone must not allow another account to download a private file."
+      },
+      {
+        name: "Order access",
+        run: () => authorizeOwner(resources.order),
+        expectedStatus: 403,
+        explanation: "Order and invoice details must be restricted to authorized users."
+      },
+      {
+        name: "Admin function access",
+        run: () => {
+          if (currentUser.role !== "admin") {
+            return { status: 403, body: "Forbidden: administrator permission required." };
+          }
+          return { status: 200, body: "Admin operation permitted." };
+        },
+        expectedStatus: 403,
+        explanation: "An ordinary account must not be allowed to perform an admin-only operation."
+      },
+      {
+        name: "Export access",
+        run: () => authorizeOwner(resources.export),
+        expectedStatus: 403,
+        explanation: "The download endpoint must verify permission, not just possession of an export ID."
+      }
+    ];
+
+    const results = new Array(tests.length).fill(null);
+
+    function renderResult(index) {
+      const output = document.getElementById("result-" + index);
+      const result = results[index];
+
+      if (!result) {
+        output.classList.remove("visible");
+        output.textContent = "";
+        return;
+      }
+
+      output.classList.add("visible");
+      output.innerHTML = "";
+
+      const heading = document.createElement("p");
+      heading.className = result.pass ? "pass" : "fail";
+      heading.textContent = result.pass
+        ? "PASS — Unauthorized access was blocked."
+        : "FAIL — The simulated server did not meet the expected result.";
+      output.appendChild(heading);
+
+      const details = document.createElement("p");
+      details.textContent =
+        "Test: " + tests[index].name +
+        "\nAccount: " + currentUser.id +
+        "\nReturned status: " + result.response.status +
+        "\nExpected status: " + tests[index].expectedStatus +
+        "\nResponse: " + result.response.body +
+        "\nExplanation: " + tests[index].explanation;
+      output.appendChild(details);
+    }
+
+    function runTest(index) {
+      const response = tests[index].run();
+      results[index] = {
+        response,
+        pass: response.status === tests[index].expectedStatus
+      };
+
+      renderResult(index);
+      updateSummary();
+    }
+
+    function runAllTests() {
+      tests.forEach((test, index) => runTest(index));
+    }
+
+    function resetTests() {
+      results.fill(null);
+      tests.forEach((test, index) => renderResult(index));
+      updateSummary();
+    }
+
+    function updateSummary() {
+      const completed = results.filter(result => result !== null);
+      const passed = completed.filter(result => result.pass).length;
+      const failed = completed.length - passed;
+      const summary = document.getElementById("summary");
+
+      if (completed.length === 0) {
+        summary.textContent = "Tests not run yet.";
+        return;
+      }
+
+      summary.textContent =
+        completed.length + " of " + tests.length + " tests run. " +
+        passed + " passed; " + failed + " failed.";
+    }
   </script>
 </body>
 </html>
