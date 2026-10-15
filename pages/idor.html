@@ -4,442 +4,1143 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="robots" content="noindex, nofollow">
-  <title>IDOR Testing Lab — Homeland of Testing</title>
+  <meta name="robots" content="noindex, nofollow, noarchive">
+  <meta name="theme-color" content="#ffffff">
+  <title>IDOR Testing Lab | Homeland of Testing</title>
+
   <style>
-    * { box-sizing: border-box; }
+    :root {
+      color-scheme: light;
+      --text: #202124;
+      --muted: #626970;
+      --border: #dedfe3;
+      --surface: #ffffff;
+      --soft: #f7f8fa;
+      --blue: #1457c5;
+      --blue-soft: #edf4ff;
+      --green: #176b3a;
+      --green-soft: #edf8f0;
+      --red: #a62a2a;
+      --red-soft: #fff0f0;
+      --orange: #88520a;
+      --orange-soft: #fff7e8;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
+      background: var(--surface);
+      color: var(--text);
+      font: 15px/1.65 Arial, Helvetica, sans-serif;
+    }
+
+    a {
+      color: var(--blue);
+    }
+
+    button,
+    select {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    button:focus-visible,
+    select:focus-visible,
+    a:focus-visible {
+      outline: 3px solid #8ab4ff;
+      outline-offset: 3px;
+    }
+
+    .topbar {
+      border-bottom: 1px solid var(--border);
       background: #fff;
-      color: #222;
-      font-family: Arial, sans-serif;
-      line-height: 1.6;
     }
 
-    header {
-      padding: 20px;
-      border-bottom: 1px solid #ddd;
+    .topbar-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 16px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
     }
 
-    header a, a { color: #0645ad; }
+    .brand {
+      color: var(--text);
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .back-link {
+      font-size: 14px;
+      text-decoration: none;
+    }
 
     main {
-      width: min(900px, calc(100% - 32px));
-      margin: 30px auto;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 32px 22px 60px;
     }
 
-    h1 { margin-bottom: 8px; }
-    h2 { font-size: 20px; }
+    .eyebrow {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    h1 {
+      margin: 5px 0 10px;
+      font-size: clamp(30px, 5vw, 43px);
+      line-height: 1.2;
+      letter-spacing: -1.1px;
+    }
+
+    h2 {
+      margin: 0 0 9px;
+      font-size: 21px;
+      line-height: 1.35;
+    }
+
+    h3 {
+      margin: 0 0 6px;
+      font-size: 16px;
+    }
+
+    p {
+      margin: 8px 0 14px;
+    }
+
+    .intro {
+      max-width: 780px;
+      color: #4e5359;
+      font-size: 16px;
+    }
+
+    .panel {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+      margin-top: 24px;
+      background: #fff;
+    }
 
     .notice {
-      padding: 12px;
-      border: 1px solid #ddd;
-      background: #fafafa;
-      margin: 20px 0;
+      background: var(--soft);
+      border-left: 4px solid #777;
+      padding: 14px 16px;
+      margin-top: 22px;
     }
 
-    .test {
-      border: 1px solid #ddd;
-      padding: 18px;
-      margin: 18px 0;
-      border-radius: 5px;
+    .notice p:last-child {
+      margin-bottom: 0;
     }
 
-    .test h2 { margin-top: 0; }
+    .warning {
+      border-left-color: #c58b22;
+      background: var(--orange-soft);
+    }
 
-    .meta {
-      color: #555;
+    .section-heading {
+      margin: 36px 0 15px;
+    }
+
+    .section-heading p {
+      color: var(--muted);
+      margin-bottom: 0;
+    }
+
+    .account-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 15px;
+    }
+
+    .account {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 14px;
+      min-width: 0;
+    }
+
+    .account p {
+      margin: 4px 0 0;
+      color: var(--muted);
       font-size: 14px;
     }
 
     code {
-      background: #f3f3f3;
+      background: #f0f1f3;
       padding: 2px 5px;
+      border-radius: 3px;
       overflow-wrap: anywhere;
+      font-family: Consolas, Monaco, monospace;
+      font-size: 0.92em;
     }
 
-    button {
+    .mode-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 20px;
+    }
+
+    .mode-control {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      min-width: 230px;
+    }
+
+    .mode-control label {
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    select {
+      padding: 10px 12px;
       background: #fff;
-      border: 1px solid #777;
+      border: 1px solid #aaa;
+      border-radius: 5px;
+      color: var(--text);
+      max-width: 100%;
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 15px;
+    }
+
+    .btn {
+      border: 1px solid #aeb2b8;
+      border-radius: 5px;
       padding: 9px 13px;
-      cursor: pointer;
-      border-radius: 4px;
-      margin: 5px 5px 5px 0;
+      background: #fff;
+      color: var(--text);
+      font-weight: 600;
       font-size: 14px;
     }
 
-    button:hover { background: #f2f2f2; }
+    .btn:hover {
+      background: #f2f4f7;
+    }
 
-    .run-all {
-      border-color: #222;
-      font-weight: bold;
+    .btn-primary {
+      background: #202124;
+      color: #fff;
+      border-color: #202124;
+    }
+
+    .btn-primary:hover {
+      background: #393b40;
+    }
+
+    .btn:disabled {
+      opacity: 0.55;
+      cursor: wait;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .stat {
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      padding: 15px;
+      min-width: 0;
+    }
+
+    .stat-label {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .stat-number {
+      display: block;
+      margin-top: 4px;
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .stat-detail {
+      display: block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 5px;
+    }
+
+    .progress-track {
+      height: 7px;
+      margin-top: 18px;
+      background: #e9eaed;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0;
+      background: var(--blue);
+      transition: width 0.2s ease;
+    }
+
+    .test-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 15px;
+      margin-top: 16px;
+    }
+
+    .test-card {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 18px;
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .test-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .test-number {
+      display: inline-block;
+      color: var(--muted);
+      font-size: 12px;
+      margin-bottom: 5px;
+    }
+
+    .status {
+      display: inline-block;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 3px 8px;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .status-idle {
+      color: #555;
+      background: #f6f6f6;
+    }
+
+    .status-running {
+      color: var(--blue);
+      background: var(--blue-soft);
+    }
+
+    .status-pass {
+      color: var(--green);
+      background: var(--green-soft);
+      border-color: #c4e4ce;
+    }
+
+    .status-exposure {
+      color: var(--red);
+      background: var(--red-soft);
+      border-color: #f0c7c7;
+    }
+
+    .status-error {
+      color: var(--orange);
+      background: var(--orange-soft);
+      border-color: #edd9b3;
+    }
+
+    .test-description {
+      color: #4e5359;
+      font-size: 14px;
+      flex: 1;
+    }
+
+    .request-example {
+      margin-top: 5px;
+      padding: 10px;
+      background: var(--soft);
+      border-radius: 5px;
+      font-size: 12px;
+      overflow-wrap: anywhere;
+    }
+
+    .request-example strong {
+      display: block;
+      margin-bottom: 4px;
+      font-size: 12px;
     }
 
     .result {
       display: none;
-      margin-top: 12px;
-      padding: 12px;
+      margin-top: 13px;
+      padding: 13px;
+      border: 1px solid var(--border);
+      border-radius: 5px;
       background: #fafafa;
-      border: 1px solid #ddd;
-      white-space: pre-wrap;
-      overflow-wrap: anywhere;
     }
 
-    .result.visible { display: block; }
+    .result.visible {
+      display: block;
+    }
 
-    .pass { color: #176b36; font-weight: bold; }
-    .fail { color: #a12222; font-weight: bold; }
+    .result p:last-child {
+      margin-bottom: 0;
+    }
 
-    footer {
-      border-top: 1px solid #ddd;
-      padding: 20px;
-      text-align: center;
-      color: #666;
+    .result pre {
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+      font-size: 12px;
+      line-height: 1.55;
+      margin: 8px 0 0;
+    }
+
+    .result-label {
+      font-weight: 700;
+    }
+
+    .small {
+      color: var(--muted);
       font-size: 13px;
+    }
+
+    .guide-list {
+      padding-left: 21px;
+    }
+
+    .guide-list li {
+      padding-left: 3px;
+      margin: 8px 0;
+    }
+
+    .checklist {
+      list-style: none;
+      padding: 0;
+    }
+
+    .checklist li {
+      margin: 10px 0;
+      padding-left: 25px;
+      position: relative;
+    }
+
+    .checklist li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      font-weight: 700;
+    }
+
+    .footer {
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+      padding: 22px;
+      text-align: center;
+      font-size: 13px;
+    }
+
+    @media (max-width: 720px) {
+      main {
+        padding: 24px 15px 40px;
+      }
+
+      .topbar-inner {
+        padding: 14px 15px;
+      }
+
+      .stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .test-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .account-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .panel {
+        padding: 15px;
+      }
     }
   </style>
 </head>
+
 <body>
-  <header>
-    <a href="/">← Homeland of Testing</a>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="/">Homeland of Testing</a>
+      <a class="back-link" href="/">← All labs</a>
+    </div>
   </header>
 
   <main>
+    <div class="eyebrow">Web security practice</div>
     <h1>IDOR Testing Lab</h1>
-    <p>
-      Practise identifying broken object-level authorization using
-      eight isolated simulations.
+
+    <p class="intro">
+      Learn how insecure direct object references and broken object-level
+      authorization can expose data belonging to another user. Run each
+      demonstration, inspect the API response, and understand the expected
+      security behavior.
     </p>
 
-    <div class="notice">
-      <strong>Simulation only:</strong>
-      These buttons run local JavaScript tests. They do not contact a real
-      server, use Burp Suite, or prove that any live website is vulnerable.
-      The simulated server checks whether the signed-in user owns the resource.
+    <div class="notice warning">
+      <strong>Controlled simulation</strong>
+      <p>
+        This lab uses fictional records. The secure mode returns a simulated
+        authorization denial; vulnerable mode intentionally returns fictional
+        test data. Neither mode accesses a real account or database.
+      </p>
     </div>
 
-    <p>
-      <strong>Test accounts:</strong>
-      Account A has ID <code>user-100</code>.
-      Account B has ID <code>user-200</code>.
-    </p>
-
-    <p>
-      <button class="run-all" onclick="runAllTests()">Run all 8 tests</button>
-      <button onclick="resetTests()">Reset results</button>
-    </p>
-
-    <p id="summary" aria-live="polite">Tests not run yet.</p>
-
-    <section class="test" data-test="0">
-      <h2>1. Numeric IDOR</h2>
-      <p>Scenario: a profile endpoint identifies profiles with numeric IDs.</p>
-      <p class="meta">
-        Request example:
-        <code>GET /api/profiles/200</code>
-      </p>
+    <section class="panel">
+      <h2>How the lab works</h2>
       <p>
-        Test: Account A attempts to read Account B's profile by its numeric ID.
+        IDOR is commonly used to describe a situation where an application
+        lets a user access another user's object by changing or supplying an
+        object identifier without properly checking authorization.
       </p>
-      <button onclick="runTest(0)">Run numeric ID test</button>
-      <div class="result" id="result-0" aria-live="polite"></div>
+
+      <div class="account-grid">
+        <div class="account">
+          <strong>Account A — Current user</strong>
+          <p>Demo ID: <code>user-100</code></p>
+          <p>Role: ordinary user</p>
+          <p>Can access its own authorized records.</p>
+        </div>
+
+        <div class="account">
+          <strong>Account B — Other user</strong>
+          <p>Demo ID: <code>user-200</code></p>
+          <p>Role: ordinary user</p>
+          <p>Owns the private demo records used in these tests.</p>
+        </div>
+      </div>
+
+      <div class="mode-row">
+        <div class="mode-control">
+          <label for="mode">Choose simulation mode</label>
+          <select id="mode">
+            <option value="secure">Secure — deny unauthorized access</option>
+            <option value="vulnerable">Vulnerable — simulate data exposure</option>
+          </select>
+        </div>
+
+        <div>
+          <span class="small">API endpoint</span><br>
+          <code>POST /api/idor-lab</code>
+        </div>
+      </div>
+
+      <p id="modeDescription" class="small">
+        Secure mode should return HTTP 403 when Account A requests Account B's private resource.
+      </p>
+
+      <div class="button-row">
+        <button class="btn btn-primary" id="runAllButton" type="button">
+          Run all 8 tests
+        </button>
+        <button class="btn" id="resetButton" type="button">
+          Reset results
+        </button>
+      </div>
     </section>
 
-    <section class="test" data-test="1">
-      <h2>2. UUID / unpredictable ID</h2>
-      <p>
-        Scenario: a document uses a UUID instead of a sequential number.
-        Unpredictable IDs do not replace authorization checks.
+    <section aria-labelledby="summaryTitle">
+      <div class="section-heading">
+        <h2 id="summaryTitle">Test summary</h2>
+        <p>Results update as individual tests complete.</p>
+      </div>
+
+      <div class="stats">
+        <div class="stat">
+          <span class="stat-label">Tests completed</span>
+          <strong class="stat-number" id="completedCount">0/8</strong>
+          <span class="stat-detail">API calls completed</span>
+        </div>
+
+        <div class="stat">
+          <span class="stat-label">Blocked as expected</span>
+          <strong class="stat-number" id="blockedCount">0</strong>
+          <span class="stat-detail">HTTP 403 in secure mode</span>
+        </div>
+
+        <div class="stat">
+          <span class="stat-label">Simulated exposures</span>
+          <strong class="stat-number" id="exposureCount">0</strong>
+          <span class="stat-detail">HTTP 200 in vulnerable mode</span>
+        </div>
+
+        <div class="stat">
+          <span class="stat-label">Unexpected results</span>
+          <strong class="stat-number" id="errorCount">0</strong>
+          <span class="stat-detail">Errors or unexpected status</span>
+        </div>
+      </div>
+
+      <div
+        class="progress-track"
+        role="progressbar"
+        aria-label="Tests completed"
+        aria-valuemin="0"
+        aria-valuemax="8"
+        aria-valuenow="0"
+        id="progressTrack"
+      >
+        <div class="progress-fill" id="progressFill"></div>
+      </div>
+
+      <p id="summaryMessage" aria-live="polite" class="small">
+        No tests have run yet.
       </p>
-      <p class="meta">
-        Example: <code>GET /api/documents/doc-b7</code>
-      </p>
-      <button onclick="runTest(1)">Run UUID access test</button>
-      <div class="result" id="result-1" aria-live="polite"></div>
     </section>
 
-    <section class="test" data-test="2">
-      <h2>3. Nested resource IDOR</h2>
+    <div class="section-heading">
+      <h2>Individual IDOR tests</h2>
       <p>
-        Scenario: a comment is requested under a particular project.
-        The server must verify access to both the project and comment.
+        Run each test separately to understand the scenario and inspect its
+        HTTP request in Burp Suite.
       </p>
-      <p class="meta">
-        Example:
-        <code>GET /api/projects/project-A/comments/comment-B</code>
-      </p>
-      <button onclick="runTest(2)">Run nested resource test</button>
-      <div class="result" id="result-2" aria-live="polite"></div>
+    </div>
+
+    <section class="test-grid" id="testGrid">
+      <article class="test-card" data-test="0">
+        <div class="test-top">
+          <div>
+            <span class="test-number">TEST 01</span>
+            <h3>Numeric IDOR</h3>
+          </div>
+          <span class="status status-idle" id="status-0">Not run</span>
+        </div>
+        <p class="test-description">
+          Numeric identifiers are often used for profiles and records.
+          A server must not assume that knowing another record's ID grants
+          permission to read it.
+        </p>
+        <div class="request-example">
+          <strong>Example endpoint</strong>
+          <code>GET /api/profiles/200</code>
+          <p class="small">Simulated object: profile-200</p>
+        </div>
+        <div class="button-row">
+          <button class="btn btn-primary run-button" data-index="0">Run test</button>
+        </div>
+        <div class="result" id="result-0" aria-live="polite"></div>
+      </article>
+
+      <article class="test-card" data-test="1">
+        <div class="test-top">
+          <div>
+            <span class="test-number">TEST 02</span>
+            <h3>UUID / unpredictable ID</h3>
+          </div>
+          <span class="status status-idle" id="status-1">Not run</span>
+        </div>
+        <p class="test-description">
+          Random-looking IDs can make guessing harder, but they are not an
+          authorization system. The server still needs to verify access.
+        </p>
+        <div class="request-example">
+          <strong>Example endpoint</strong>
+          <code>GET /api/documents/doc-b7</code>
+          <p class="small">Simulated object: document-b7</p>
+        </div>
+        <div class="button-row">
+          <button class="btn btn-primary run-button" data-index="1">Run test</button>
+        </div>
+        <div class="result" id="result-1" aria-live="polite"></div>
+      </article>
+
+      <article class="test-card" data-test="2">
+        <div class="test-top">
+          <div>
+            <span class="test-number">TEST 03</span>
+            <h3>Nested resource IDOR</h3>
+          </div>
+          <span class="status status-idle" id="status-2">Not run</span>
+        </div>
+        <p class="test-description">
+          A comment, task, or attachment may belong to a parent project.
+          Authorization should cover both the parent and the requested item.
+        </p>
+        <div class="request-example">
+          <strong>Example endpoint</strong>
+          <code>GET /api/projects/project-A/comments/comment-B</code>
+          <p class="small">Simulated object: comment-b</p>
+        </div>
+        <div class="button-row">
+          <button class="btn btn-primary run-button" data-index="2">Run test</button>
+        </div>
+        <div class="result" id="result-2" aria-live="polite"></div>
+      </article>
+
+      <article class="test-card" data-test="3">
+        <div class="test-top">
+          <div>
+            <span class="test-number">TEST 04</span>
+            <h3>API object access</h3>
+          </div>
+          <span class="status status-idle" id="status-3">Not run</span>
+        </div>
+        <p class="test-description">
+          An API may return private settings or account details. Hiding a
+          button in the frontend is not enough; the backend must authorize
+          the request.
+        </p>
+        <div class="request-example">
+          <strong>Example endpoint</strong>
+          <code>GET /api/users/user-200/settings</code>
+          <p class="small">Simulated object: settings-200</p>
+        </div>
+        <div class="button-row">
+          <button class="btn btn-primary run-button" data-index="3">Run test</button>
+        </div>
+        <div class="result" id="result-3" aria-live="polite"></div>
+      </article>
+
+      <article class="test-card" data-test="4">
+        <div class="test-top">
+          <div>
+            <span class="test-number">TEST 05</span>
+            <h3>File / document access</h3>
+          </div>
+          <span class="status status-idle" id="status-4">Not run</span>
+        </div>
+        <p class="test-description">
+          Private reports and documents should only be returned to authorized
+          users. A predictable filename or a copied file identifier should
+          not bypass the permission check.
+        </p>
+        <div class="request-example">
+          <strong>Example endpoint</strong>
+          <code>GET /api/files/report-B</code>
+          <p class="small">Simulated object: report-B</p>
+        </div>
+        <div class="button-row">
+          <button class="btn btn-primary run-button" data-index="4">Run test</button>
+        </div>
+        <div class="result" id="result-4" aria-live="polite"></div>
+      </article>
+
+      <article class="test-card" data-test="5">
+        <div class="test-top">
+          <div>
+            <span class="test-number">TEST 06</span>
+            <h3>Order / invoice access</h3>
+          </div>
+          <span class="status status-idle" id="status-5">Not run</span>
+        </div>
+        <p class="test-description">
+          Order history, invoices, and payment records can contain private
+          information. The server should verify who owns the order or has
+          been explicitly authorized to view it.
+        </p>
+        <div class="request-example">
+          <strong>Example endpoint</strong>
+          <code>GET /api/orders/order-B</code>
+          <p class="small">Simulated object: order-B</p>
+        </div>
+        <div class="button-row">
+          <button class="btn btn-primary run-button" data-index="5">Run test</button>
+        </div>
+        <div class="result" id="result-5" aria-live="polite"></div>
+      </article>
+
+      <article class="test-card" data-test="6">
+        <div class="test-top">
+          <div>
+            <span class="test-number">TEST 07</span>
+            <h3>Admin function access</h3>
+          </div>
+          <span class="status status-idle" id="status-6">Not run</span>
+        </div>
+        <p class="test-description">
+          This is a related access-control check, usually called broken
+          function-level authorization (BFLA). An ordinary account should
+          not be able to perform administrator-only operations.
+        </p>
+        <div class="request-example">
+          <strong>Example endpoint</strong>
+          <code>POST /api/admin/reports</code>
+          <p class="small">Simulated operation: admin-report</p>
+        </div>
+        <div class="button-row">
+          <button class="btn btn-primary run-button" data-index="6">Run test</button>
+        </div>
+        <div class="result" id="result-6" aria-live="polite"></div>
+      </article>
+
+      <article class="test-card" data-test="7">
+        <div class="test-top">
+          <div>
+            <span class="test-number">TEST 08</span>
+            <h3>Export / download access</h3>
+          </div>
+          <span class="status status-idle" id="status-7">Not run</span>
+        </div>
+        <p class="test-description">
+          A private export may be stored separately from the page that
+          requested it. Its download endpoint must still verify authorization.
+        </p>
+        <div class="request-example">
+          <strong>Example endpoint</strong>
+          <code>GET /api/exports/export-B/download</code>
+          <p class="small">Simulated object: export-B</p>
+        </div>
+        <div class="button-row">
+          <button class="btn btn-primary run-button" data-index="7">Run test</button>
+        </div>
+        <div class="result" id="result-7" aria-live="polite"></div>
+      </article>
     </section>
 
-    <section class="test" data-test="3">
-      <h2>4. API object access</h2>
+    <section class="panel">
+      <h2>How to inspect requests in Burp Suite</h2>
+      <ol class="guide-list">
+        <li>Deploy this page and the API endpoint to your Vercel project.</li>
+        <li>Open the page in a browser configured to use Burp's proxy.</li>
+        <li>Open <strong>Proxy → HTTP history</strong> in Burp Suite.</li>
+        <li>Select a simulation mode, then click a test's <strong>Run test</strong> button.</li>
+        <li>
+          Find <code>POST /api/idor-lab</code>. Inspect the JSON request body
+          and the JSON response.
+        </li>
+      </ol>
+
       <p>
-        Scenario: an API returns a user's private settings.
-        The API must check the authenticated user's permission.
+        The actual lab request is sent to <code>/api/idor-lab</code>.
+        The other paths shown on the test cards are illustrative scenarios,
+        not separate live endpoints.
       </p>
-      <p class="meta">
-        Example: <code>GET /api/users/user-200/settings</code>
-      </p>
-      <button onclick="runTest(3)">Run API authorization test</button>
-      <div class="result" id="result-3" aria-live="polite"></div>
     </section>
 
-    <section class="test" data-test="4">
-      <h2>5. File / document access</h2>
-      <p>
-        Scenario: a private report belongs to Account B.
-        Knowing its file identifier should not grant access.
-      </p>
-      <p class="meta">
-        Example: <code>GET /api/files/report-B</code>
-      </p>
-      <button onclick="runTest(4)">Run file access test</button>
-      <div class="result" id="result-4" aria-live="polite"></div>
-    </section>
+    <section class="panel">
+      <h2>Understanding the results</h2>
+      <ul class="checklist">
+        <li>
+          <strong>HTTP 403 in secure mode:</strong>
+          the simulation denied the request, as expected.
+        </li>
+        <li>
+          <strong>HTTP 200 in vulnerable mode:</strong>
+          the simulation returned fictional data to demonstrate the risk.
+        </li>
+        <li>
+          <strong>HTTP 400:</strong>
+          the endpoint rejected the supplied input.
+        </li>
+        <li>
+          <strong>HTTP 404 or 405:</strong>
+          check the deployed API path, file name, and HTTP method.
+        </li>
+        <li>
+          <strong>Network error:</strong>
+          check the browser Network panel, Vercel deployment logs, and Burp proxy configuration.
+        </li>
+      </ul>
 
-    <section class="test" data-test="5">
-      <h2>6. Invoice / order access</h2>
-      <p>
-        Scenario: Account A tries to view an order belonging to Account B.
-        Private order details must remain restricted.
-      </p>
-      <p class="meta">
-        Example: <code>GET /api/orders/order-B</code>
-      </p>
-      <button onclick="runTest(5)">Run order access test</button>
-      <div class="result" id="result-5" aria-live="polite"></div>
-    </section>
-
-    <section class="test" data-test="6">
-      <h2>7. Role / function authorization</h2>
-      <p>
-        Related access-control test: Account A attempts an administrator-only
-        operation. This is generally called broken function-level authorization
-        (BFLA), rather than a classic IDOR.
-      </p>
-      <p class="meta">
-        Example: <code>POST /api/admin/reports</code>
-      </p>
-      <button onclick="runTest(6)">Run admin permission test</button>
-      <div class="result" id="result-6" aria-live="polite"></div>
-    </section>
-
-    <section class="test" data-test="7">
-      <h2>8. Export / download access</h2>
-      <p>
-        Scenario: Account A requests a private export generated for Account B.
-        The download endpoint must check ownership or explicit permission.
-      </p>
-      <p class="meta">
-        Example: <code>GET /api/exports/export-B/download</code>
-      </p>
-      <button onclick="runTest(7)">Run export access test</button>
-      <div class="result" id="result-7" aria-live="polite"></div>
-    </section>
-
-    <section class="test">
-      <h2>What do the results mean?</h2>
-      <p>
-        <span class="pass">PASS</span> means the simulated server blocked the
-        unauthorized request as expected.
-      </p>
-      <p>
-        <span class="fail">FAIL</span> means the simulated server returned
-        protected data to the wrong account.
-      </p>
-      <p>
-        These results describe only the built-in simulations. To test a real
-        application, use an authorized test environment and verify its actual
-        server responses.
-      </p>
+      <div class="notice">
+        <strong>Important</strong>
+        <p>
+          A successful simulation is not proof that a real application is
+          secure or vulnerable. Real authorization testing requires a
+          permitted test environment, appropriate test accounts, and
+          verification of the application's actual server-side behavior.
+        </p>
+      </div>
     </section>
   </main>
 
-  <footer>Homeland of Testing — Educational lab</footer>
+  <footer class="footer">
+    Homeland of Testing · Educational security lab
+  </footer>
 
   <script>
-    // Fictional data used only inside this browser page.
-    const currentUser = {
-      id: "user-100",
-      role: "user"
-    };
+    "use strict";
 
-    const resources = {
-      profile: { id: "200", owner: "user-200", data: "Private profile B" },
-      document: { id: "doc-b7", owner: "user-200", data: "Private document B" },
-      project: { id: "project-A", owner: "user-100" },
-      comment: {
-        id: "comment-B",
-        projectId: "project-A",
-        owner: "user-200",
-        data: "Private comment B"
-      },
-      settings: {
-        id: "user-200",
-        owner: "user-200",
-        data: "Private settings B"
-      },
-      file: { id: "report-B", owner: "user-200", data: "Private report B" },
-      order: { id: "order-B", owner: "user-200", data: "Private order B" },
-      export: { id: "export-B", owner: "user-200", data: "Private export B" }
-    };
-
-    // Simulated server: deny access unless the current account owns the item.
-    function authorizeOwner(resource) {
-      if (!resource) {
-        return { status: 404, body: "Resource not found." };
-      }
-
-      if (resource.owner !== currentUser.id) {
-        return { status: 403, body: "Forbidden: you do not own this resource." };
-      }
-
-      return { status: 200, body: resource.data || "Authorized." };
-    }
-
-    // Each test attempts to access a fictional resource owned by Account B.
-    // The expected outcome is denial. These functions never make network calls.
-    const tests = [
-      {
-        name: "Numeric IDOR",
-        run: () => authorizeOwner(resources.profile),
-        expectedStatus: 403,
-        explanation: "A numeric identifier must not grant access to another user's profile."
-      },
-      {
-        name: "UUID access",
-        run: () => authorizeOwner(resources.document),
-        expectedStatus: 403,
-        explanation: "An unpredictable identifier must still be checked against the user's permissions."
-      },
-      {
-        name: "Nested resource IDOR",
-        run: () => {
-          const project = resources.project;
-          const comment = resources.comment;
-
-          if (!project || project.owner !== currentUser.id) {
-            return { status: 403, body: "Forbidden: no access to parent project." };
-          }
-
-          if (!comment || comment.projectId !== project.id ||
-              comment.owner !== currentUser.id) {
-            return { status: 403, body: "Forbidden: no access to this comment." };
-          }
-
-          return { status: 200, body: comment.data };
-        },
-        expectedStatus: 403,
-        explanation: "The server must check access to the parent and the nested item."
-      },
-      {
-        name: "API object access",
-        run: () => authorizeOwner(resources.settings),
-        expectedStatus: 403,
-        explanation: "Private API data must be authorized on the server."
-      },
-      {
-        name: "File access",
-        run: () => authorizeOwner(resources.file),
-        expectedStatus: 403,
-        explanation: "A file ID alone must not allow another account to download a private file."
-      },
-      {
-        name: "Order access",
-        run: () => authorizeOwner(resources.order),
-        expectedStatus: 403,
-        explanation: "Order and invoice details must be restricted to authorized users."
-      },
-      {
-        name: "Admin function access",
-        run: () => {
-          if (currentUser.role !== "admin") {
-            return { status: 403, body: "Forbidden: administrator permission required." };
-          }
-          return { status: 200, body: "Admin operation permitted." };
-        },
-        expectedStatus: 403,
-        explanation: "An ordinary account must not be allowed to perform an admin-only operation."
-      },
-      {
-        name: "Export access",
-        run: () => authorizeOwner(resources.export),
-        expectedStatus: 403,
-        explanation: "The download endpoint must verify permission, not just possession of an export ID."
-      }
+    const TEST_NAMES = [
+      "Numeric IDOR",
+      "UUID / unpredictable ID",
+      "Nested resource IDOR",
+      "API object access",
+      "File / document access",
+      "Order / invoice access",
+      "Admin function access",
+      "Export / download access"
     ];
 
-    const results = new Array(tests.length).fill(null);
+    const results = new Array(TEST_NAMES.length).fill(null);
+    const running = new Set();
 
-    function renderResult(index) {
-      const output = document.getElementById("result-" + index);
-      const result = results[index];
+    const modeSelect = document.getElementById("mode");
+    const runAllButton = document.getElementById("runAllButton");
+    const resetButton = document.getElementById("resetButton");
+    const modeDescription = document.getElementById("modeDescription");
 
-      if (!result) {
-        output.classList.remove("visible");
-        output.textContent = "";
-        return;
+    modeSelect.addEventListener("change", () => {
+      if (modeSelect.value === "secure") {
+        modeDescription.textContent =
+          "Secure mode should return HTTP 403 when Account A requests Account B's private resource.";
+      } else {
+        modeDescription.textContent =
+          "Vulnerable mode intentionally returns fictional test data with HTTP 200. It does not access real records.";
       }
+    });
 
+    document.querySelectorAll(".run-button").forEach(button => {
+      button.addEventListener("click", () => {
+        runTest(Number(button.dataset.index));
+      });
+    });
+
+    runAllButton.addEventListener("click", runAllTests);
+    resetButton.addEventListener("click", resetTests);
+
+    function setStatus(index, label, className) {
+      const element = document.getElementById("status-" + index);
+      element.textContent = label;
+      element.className = "status " + className;
+    }
+
+    function showResult(index, data) {
+      const output = document.getElementById("result-" + index);
+      output.replaceChildren();
       output.classList.add("visible");
-      output.innerHTML = "";
 
       const heading = document.createElement("p");
-      heading.className = result.pass ? "pass" : "fail";
-      heading.textContent = result.pass
-        ? "PASS — Unauthorized access was blocked."
-        : "FAIL — The simulated server did not meet the expected result.";
+      heading.className = "result-label";
+
+      if (data.kind === "blocked") {
+        heading.textContent = "PASS — access denied as expected";
+        heading.style.color = "var(--green)";
+      } else if (data.kind === "exposure") {
+        heading.textContent = "SIMULATED EXPOSURE — demo data returned";
+        heading.style.color = "var(--red)";
+      } else {
+        heading.textContent = "UNEXPECTED RESULT — inspect the response";
+        heading.style.color = "var(--orange)";
+      }
+
       output.appendChild(heading);
 
-      const details = document.createElement("p");
-      details.textContent =
-        "Test: " + tests[index].name +
-        "\nAccount: " + currentUser.id +
-        "\nReturned status: " + result.response.status +
-        "\nExpected status: " + tests[index].expectedStatus +
-        "\nResponse: " + result.response.body +
-        "\nExplanation: " + tests[index].explanation;
+      const explanation = document.createElement("p");
+      explanation.textContent = data.explanation;
+      output.appendChild(explanation);
+
+      const statusLine = document.createElement("p");
+      statusLine.textContent = "HTTP status: " + data.status;
+      output.appendChild(statusLine);
+
+      const details = document.createElement("pre");
+      details.textContent = JSON.stringify(data.body, null, 2);
       output.appendChild(details);
     }
 
-    function runTest(index) {
-      const response = tests[index].run();
-      results[index] = {
-        response,
-        pass: response.status === tests[index].expectedStatus
-      };
-
-      renderResult(index);
-      updateSummary();
-    }
-
-    function runAllTests() {
-      tests.forEach((test, index) => runTest(index));
-    }
-
-    function resetTests() {
-      results.fill(null);
-      tests.forEach((test, index) => renderResult(index));
-      updateSummary();
-    }
-
-    function updateSummary() {
-      const completed = results.filter(result => result !== null);
-      const passed = completed.filter(result => result.pass).length;
-      const failed = completed.length - passed;
-      const summary = document.getElementById("summary");
-
-      if (completed.length === 0) {
-        summary.textContent = "Tests not run yet.";
+    async function runTest(index) {
+      if (!Number.isInteger(index) || index < 0 ||
+          index >= TEST_NAMES.length || running.has(index)) {
         return;
       }
 
-      summary.textContent =
-        completed.length + " of " + tests.length + " tests run. " +
-        passed + " passed; " + failed + " failed.";
+      running.add(index);
+      updateControls();
+      setStatus(index, "Running...", "status-running");
+
+      const output = document.getElementById("result-" + index);
+      output.classList.add("visible");
+      output.textContent = "Sending request to /api/idor-lab...";
+
+      const selectedMode = modeSelect.value;
+
+      try {
+        const response = await fetch("/api/idor-lab", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          body: JSON.stringify({
+            testId: index,
+            mode: selectedMode
+          }),
+          cache: "no-store"
+        });
+
+        let body;
+        try {
+          body = await response.json();
+        } catch {
+          body = { error: "The API did not return valid JSON." };
+        }
+
+        let kind = "unexpected";
+        let explanation;
+
+        if (
+          selectedMode === "secure" &&
+          response.status === 403 &&
+          body.simulatedVulnerability === false
+        ) {
+          kind = "blocked";
+          explanation =
+            "The simulated server blocked access to the other account's resource.";
+          setStatus(index, "Blocked", "status-pass");
+        } else if (
+          selectedMode === "vulnerable" &&
+          response.status === 200 &&
+          body.simulatedVulnerability === true
+        ) {
+          kind = "exposure";
+          explanation =
+            "The demo endpoint intentionally returned fictional data to illustrate an authorization failure.";
+          setStatus(index, "Simulated exposure", "status-exposure");
+        } else {
+          explanation =
+            "The response did not match the selected mode's expected result. Check the HTTP status and response body.";
+          setStatus(index, "Check result", "status-error");
+        }
+
+        results[index] = {
+          mode: selectedMode,
+          status: response.status,
+          kind,
+          body,
+          explanation
+        };
+
+        showResult(index, results[index]);
+      } catch (error) {
+        results[index] = {
+          mode: selectedMode,
+          status: "Network error",
+          kind: "unexpected",
+          body: {
+            error: "Could not reach the API.",
+            message: String(error)
+          },
+          explanation:
+            "Check that the API is deployed, the URL is correct, and the browser can reach the same origin."
+        };
+
+        setStatus(index, "Request failed", "status-error");
+        showResult(index, results[index]);
+      } finally {
+        running.delete(index);
+        updateControls();
+        updateSummary();
+      }
     }
+
+    async function runAllTests() {
+      if (running.size > 0) return;
+
+      runAllButton.disabled = true;
+
+      try {
+        for (let index = 0; index < TEST_NAMES.length; index++) {
+          await runTest(index);
+        }
+      } finally {
+        updateControls();
+      }
+    }
+
+    function resetTests() {
+      if (running.size > 0) return;
+
+      results.fill(null);
+
+      TEST_NAMES.forEach((name, index) => {
+        setStatus(index, "Not run", "status-idle");
+
+        const output = document.getElementById("result-" + index);
+        output.replaceChildren();
+        output.classList.remove("visible");
+      });
+
+      updateSummary();
+    }
+
+    function updateControls() {
+      const busy = running.size > 0;
+
+      runAllButton.disabled = busy;
+      resetButton.disabled = busy;
+      modeSelect.disabled = busy;
+
+      document.querySelectorAll(".run-button").forEach(button => {
+        button.disabled = busy;
+      });
+    }
+
+    function updateSummary() {
+      const completed = results.filter(Boolean);
+      const blocked = completed.filter(item => item.kind === "blocked").length;
+      const exposures = completed.filter(item => item.kind === "exposure").length;
+      const errors = completed.filter(item => item.kind === "unexpected").length;
+
+      document.getElementById("completedCount").textContent =
+        completed.length + "/" + TEST_NAMES.length;
+
+      document.getElementById("blockedCount").textContent = blocked;
+      document.getElementById("exposureCount").textContent = exposures;
+      document.getElementById("errorCount").textContent = errors;
+
+      const percent = (completed.length / TEST_NAMES.length) * 100;
+
+      document.getElementById("progressFill").style.width = percent + "%";
+      document.getElementById("progressTrack").setAttribute(
+        "aria-valuenow",
+        String(completed.length)
+      );
+
+      const message = document.getElementById("summaryMessage");
+
+      if (completed.length === 0) {
+        message.textContent = "No tests have run yet.";
+      } else if (completed.length < TEST_NAMES.length) {
+        message.textContent =
+          completed.length + " of " + TEST_NAMES.length +
+          " tests completed. Run the remaining tests to finish this set.";
+      } else if (errors > 0) {
+        message.textContent =
+          "All tests ran, but " + errors +
+          " result(s) were unexpected. Review their response details.";
+      } else if (exposures > 0) {
+        message.textContent =
+          "The vulnerable simulation returned demo data in " + exposures +
+          " test(s). This demonstrates the scenario, not a real-world finding.";
+      } else {
+        message.textContent =
+          "All tests were blocked as expected in the secure simulation. This confirms the demo behavior only.";
+      }
+    }
+
+    updateSummary();
   </script>
 </body>
 </html>
