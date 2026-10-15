@@ -4,151 +4,265 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Bypass OTP - Homeland of Testing</title>
+  <title>OTP Testing | Homeland of Testing</title>
 
   <style>
-    * {
-      box-sizing: border-box;
-    }
+    * { box-sizing: border-box; }
 
     body {
       margin: 0;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-      background: #ffffff;
+      padding: 24px 16px;
+      background: #fff;
       color: #202124;
       font-family: Arial, sans-serif;
     }
 
     .container {
       width: 100%;
-      max-width: 360px;
-      text-align: center;
+      max-width: 620px;
+      margin: 35px auto;
     }
 
-    .home {
-      display: block;
-      margin-bottom: 35px;
+    a {
       color: #1a73e8;
-      text-align: left;
-      font-size: 14px;
       text-decoration: none;
     }
 
+    a:hover { text-decoration: underline; }
+
+    .back {
+      display: inline-block;
+      margin-bottom: 28px;
+      font-size: 14px;
+    }
+
     h1 {
-      margin: 0 0 12px;
-      font-size: 25px;
+      margin-bottom: 8px;
+      font-size: 27px;
       font-weight: 600;
     }
 
-    p {
-      margin: 0 0 25px;
-      color: #70757a;
+    .description {
+      color: #5f6368;
       font-size: 14px;
       line-height: 1.6;
+    }
+
+    .panel {
+      margin-top: 24px;
+      padding: 22px;
+      border: 1px solid #dadce0;
+      border-radius: 10px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 9px;
+      font-size: 14px;
+      font-weight: 600;
     }
 
     .otp-inputs {
       display: flex;
-      justify-content: center;
-      gap: 12px;
-      margin-bottom: 22px;
+      gap: 10px;
+      margin-bottom: 18px;
     }
 
     .otp-inputs input {
-      width: 58px;
-      height: 62px;
+      width: 55px;
+      height: 58px;
       border: 1px solid #dadce0;
-      border-radius: 8px;
-      outline: none;
+      border-radius: 7px;
       text-align: center;
-      font-size: 25px;
-      color: #202124;
+      font-size: 23px;
+      outline: none;
     }
 
     .otp-inputs input:focus {
       border-color: #1a73e8;
-      box-shadow: 0 0 0 1px #1a73e8;
     }
 
     button {
-      width: 100%;
-      padding: 13px;
-      border: 0;
-      border-radius: 7px;
-      background: #1a73e8;
-      color: white;
-      font-size: 15px;
+      min-height: 40px;
+      padding: 10px 15px;
+      border: 1px solid #dadce0;
+      border-radius: 6px;
+      background: #fff;
+      color: #202124;
       cursor: pointer;
+      font-size: 14px;
     }
 
-    button:hover {
-      background: #1765cc;
+    button:hover { background: #f8f9fa; }
+
+    button.primary {
+      border-color: #1a73e8;
+      background: #1a73e8;
+      color: #fff;
     }
 
-    #message {
-      margin-top: 20px;
+    button.primary:hover { background: #1765cc; }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 18px;
+    }
+
+    .stat {
+      padding: 15px;
+      border: 1px solid #dadce0;
+      border-radius: 8px;
+    }
+
+    .stat span {
+      display: block;
+      color: #5f6368;
+      font-size: 12px;
+    }
+
+    .stat strong {
+      display: block;
+      margin-top: 6px;
+      font-size: 23px;
+    }
+
+    #result {
+      margin-top: 17px;
       font-size: 14px;
       line-height: 1.6;
     }
 
-    .success {
-      color: #188038;
+    .success { color: #188038; }
+    .error { color: #d93025; }
+
+    .log-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
     }
 
-    .error {
-      color: #d93025;
+    .log-heading h2 {
+      margin: 0;
+      font-size: 17px;
     }
 
-    .back-home {
-      display: inline-block;
-      margin-top: 12px;
-      color: #1a73e8;
-      text-decoration: none;
+    #log {
+      max-height: 280px;
+      overflow-y: auto;
+      margin: 0;
+      padding: 0;
+      list-style: none;
     }
 
-    .back-home:hover,
-    .home:hover {
-      text-decoration: underline;
+    #log li {
+      padding: 11px 0;
+      border-top: 1px solid #eee;
+      overflow-wrap: anywhere;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .muted {
+      color: #70757a;
+      font-size: 12px;
+    }
+
+    @media (max-width: 420px) {
+      .panel { padding: 16px; }
+      .otp-inputs { gap: 7px; }
+      .otp-inputs input {
+        width: 48px;
+        height: 53px;
+      }
     }
   </style>
 </head>
 
 <body>
   <main class="container">
-    <a class="home" href="/">← Homeland of Testing</a>
+    <a class="back" href="/">← Homeland of Testing</a>
 
-    <h1>Bypass OTP</h1>
-    <p>Enter the 4-digit OTP to complete this testing exercise.</p>
+    <h1>OTP Testing Lab</h1>
+    <p class="description">
+      Test four-digit OTP verification and inspect simulated request
+      results. This demo does not contact an external server.
+    </p>
 
-    <form id="otpForm">
-      <div class="otp-inputs">
-        <input aria-label="Digit 1" inputmode="numeric"
-               maxlength="1" pattern="[0-9]" required autofocus>
-        <input aria-label="Digit 2" inputmode="numeric"
-               maxlength="1" pattern="[0-9]" required>
-        <input aria-label="Digit 3" inputmode="numeric"
-               maxlength="1" pattern="[0-9]" required>
-        <input aria-label="Digit 4" inputmode="numeric"
-               maxlength="1" pattern="[0-9]" required>
+    <section class="panel">
+      <form id="otpForm">
+        <label for="digit1">Enter the four-digit OTP</label>
+
+        <div class="otp-inputs">
+          <input id="digit1" inputmode="numeric" maxlength="1"
+                 pattern="[0-9]" aria-label="First digit" required>
+          <input inputmode="numeric" maxlength="1"
+                 pattern="[0-9]" aria-label="Second digit" required>
+          <input inputmode="numeric" maxlength="1"
+                 pattern="[0-9]" aria-label="Third digit" required>
+          <input inputmode="numeric" maxlength="1"
+                 pattern="[0-9]" aria-label="Fourth digit" required>
+        </div>
+
+        <div class="actions">
+          <button class="primary" type="submit">Send Request</button>
+          <button type="button" id="clear">Clear OTP</button>
+        </div>
+      </form>
+
+      <div id="result" aria-live="polite"></div>
+
+      <div class="stats">
+        <div class="stat">
+          <span>Total requests</span>
+          <strong id="total">0</strong>
+        </div>
+        <div class="stat">
+          <span>Successful requests</span>
+          <strong id="passed">0</strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="log-heading">
+        <h2>Request Log</h2>
+        <button id="clearLog" type="button">Clear log</button>
       </div>
 
-      <button type="submit">Verify OTP</button>
-    </form>
+      <p class="muted">
+        Each entry represents one local simulated verification request.
+      </p>
 
-    <div id="message" aria-live="polite"></div>
+      <ul id="log">
+        <li class="muted">No requests yet.</li>
+      </ul>
+    </section>
   </main>
 
   <script>
-    // Demo only: this OTP is visible in the client-side HTML.
+    // Demonstration only. This value is visible in the page source.
     const DEMO_OTP = "6738";
 
     const form = document.getElementById("otpForm");
     const inputs = [...document.querySelectorAll(".otp-inputs input")];
-    const message = document.getElementById("message");
+    const result = document.getElementById("result");
+    const totalDisplay = document.getElementById("total");
+    const passedDisplay = document.getElementById("passed");
+    const log = document.getElementById("log");
+
+    let total = 0;
+    let passed = 0;
+    let entries = [];
 
     inputs.forEach((input, index) => {
       input.addEventListener("input", () => {
@@ -158,62 +272,116 @@
           inputs[index + 1].focus();
         }
 
-        message.textContent = "";
-        message.className = "";
+        result.textContent = "";
+        result.className = "";
       });
 
       input.addEventListener("keydown", event => {
-        if (event.key === "Backspace" && !input.value && index > 0) {
+        if (
+          event.key === "Backspace" &&
+          !input.value &&
+          index > 0
+        ) {
           inputs[index - 1].focus();
-        }
-
-        if (event.key === "ArrowLeft" && index > 0) {
-          inputs[index - 1].focus();
-        }
-
-        if (event.key === "ArrowRight" && index < inputs.length - 1) {
-          inputs[index + 1].focus();
-        }
-      });
-
-      input.addEventListener("paste", event => {
-        const pasted = event.clipboardData
-          .getData("text")
-          .replace(/\D/g, "")
-          .slice(0, 4);
-
-        if (pasted.length > 1) {
-          event.preventDefault();
-
-          [...pasted].forEach((digit, i) => {
-            inputs[i].value = digit;
-          });
-
-          inputs[Math.min(pasted.length, 3)].focus();
         }
       });
     });
+
+    function renderLog() {
+      log.replaceChildren();
+
+      if (entries.length === 0) {
+        const item = document.createElement("li");
+        item.className = "muted";
+        item.textContent = "No requests yet.";
+        log.appendChild(item);
+        return;
+      }
+
+      entries.forEach(entry => {
+        const item = document.createElement("li");
+        const time = document.createElement("span");
+        const detail = document.createElement("div");
+
+        time.className = "muted";
+        time.textContent = entry.time;
+
+        detail.textContent =
+          "Request #" + entry.number + " — " + entry.status;
+
+        if (entry.success) detail.className = "success";
+        else detail.className = "error";
+
+        item.append(time, detail);
+        log.appendChild(item);
+      });
+    }
 
     form.addEventListener("submit", event => {
       event.preventDefault();
 
-      const enteredOTP = inputs.map(input => input.value).join("");
+      const otp = inputs.map(input => input.value).join("");
 
-      if (enteredOTP.length !== 4) {
-        message.textContent = "Please enter all 4 digits.";
-        message.className = "error";
+      if (!/^\d{4}$/.test(otp)) {
+        result.textContent = "Enter all four digits first.";
+        result.className = "error";
         return;
       }
 
-      if (enteredOTP === DEMO_OTP) {
-        message.className = "success";
-        message.innerHTML =
-          'You passed the test!<br><a class="back-home" href="/">Go to Home</a>';
-      } else {
-        message.textContent = "Incorrect OTP. Try again.";
-        message.className = "error";
+      // Simulate a request locally. No network request is sent.
+      total++;
+
+      const success = otp === DEMO_OTP;
+      if (success) passed++;
+
+      const status = success
+        ? "Verification successful"
+        : "Verification failed";
+
+      result.className = success ? "success" : "error";
+      result.textContent = success
+        ? "You passed the test! Go to Home."
+        : "Incorrect OTP. The test request was recorded.";
+
+      if (success) {
+        const link = document.createElement("a");
+        link.href = "/";
+        link.textContent = " Go to Home";
+        result.appendChild(link);
       }
+
+      entries.unshift({
+        number: total,
+        time: new Date().toLocaleTimeString(),
+        status,
+        success
+      });
+
+      totalDisplay.textContent = total;
+      passedDisplay.textContent = passed;
+      renderLog();
     });
+
+    document.getElementById("clear").addEventListener("click", () => {
+      inputs.forEach(input => input.value = "");
+      result.textContent = "";
+      result.className = "";
+      inputs[0].focus();
+    });
+
+    document.getElementById("clearLog").addEventListener("click", () => {
+      total = 0;
+      passed = 0;
+      entries = [];
+
+      totalDisplay.textContent = "0";
+      passedDisplay.textContent = "0";
+      renderLog();
+      result.textContent = "";
+      result.className = "";
+    });
+
+    inputs[0].focus();
   </script>
 </body>
 </html>
