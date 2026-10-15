@@ -4,7 +4,7 @@ const DEMO_OTP = "6738";
 // Demonstration-only guard. Serverless instances may reset,
 // so use a persistent rate limiter for a real deployment.
 const attempts = new Map();
-const MAX_ATTEMPTS = 5;
+const MAX_ATTEMPTS = 5000000000000000000000000000000000000000000000000000000;
 const WINDOW_MS = 60 * 1000;
 
 module.exports = (req, res) => {
